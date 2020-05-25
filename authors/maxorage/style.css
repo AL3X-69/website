@@ -1,0 +1,45 @@
+body{
+	margin: 0;
+}
+
+#banner1 {
+	display: block;
+	background-color: #FF0000;
+	height: 50px;
+	width: 100%;
+}
+
+#menu {
+	position: relative;
+	background-color: #FF4500;
+	height: 100px;
+	width: 100%;
+}
+
+#menu ul {
+	float: left;
+}
+
+#menu ul li {
+	margin-left: 20px;
+	float: left;
+	list-style-type: none; 
+}
+
+#menu ul li a {
+	text-align: center;
+	padding-top: 10px;
+	display: inline-block;
+	background-color: #FF0000
+	height: 30px;
+	width: 100px;
+	color: black;
+	text-decoration: none;
+}
+
+#banner2 {
+	display: block;
+	background-color: #FF0000;
+	height: 50px;
+	width: 100%;
+}
