@@ -58,9 +58,9 @@
         };
         // method that we will use to update the control based on feature properties passed
         info.update = function (props) {
-          this._div.innerHTML = '<h4>Statistiques Covid19</h4>' +  (props ?
-              '<b>' + props.nom + '</b><br />' + getRate(props.code) + ' people / mi<sup>2</sup>'
-              : 'Hover over a state');
+          this._div.innerHTML = '<h4>Statistiques Covid-19</h4>' +  (props ?
+              '<b>' + props.nom + '</b><br /><b>' + getRate(props.code) + '</b> personnes contaminés'
+              : 'Survoler un département pour voir les informations');
         };
         info.addTo(map);
 
