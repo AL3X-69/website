@@ -108,7 +108,7 @@
         var csv = null;
         function completed(c) {
           csv = c;
-          $.ajax("https://al3x-69.github.com/website/covid/departements.geojson", {}).done(geo => {
+          $.ajax("https://al3x69.000webhostapp.com/departements.geojson", {}).done(geo => {
             geojson = L.geoJson(JSON.parse(geo), {style: style, onEachFeature: onEachFeature}).addTo(map);
           });
         }
