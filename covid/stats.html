@@ -41,7 +41,7 @@
         </div>
         <div class="column is-one-quarter">
           <div id="pp"></div>
-          <img src="colorscheme.png" alt="color scheme" width="360" height="360">
+          <!--<img src="colorscheme.png" alt="color scheme" width="360" height="360">-->
         </div>
         <div class="column">
 
@@ -59,7 +59,7 @@
         // method that we will use to update the control based on feature properties passed
         info.update = function (props) {
           this._div.innerHTML = '<h4>Statistiques Covid-19</h4>' +  (props ?
-              '<b>' + props.nom + '</b><br /><b>' + getRate(props.code) + '</b> personnes contaminés'
+              '<b>' + props.nom + '</b><br /><b>' + getRate(props.code) + '</b> personnes contaminés<br/>Soit '+getPercent(props.code)+"% de la population"
               : 'Survoler un département pour voir les informations');
         };
         info.addTo(map);
@@ -67,13 +67,21 @@
         var geojson;
         function getColor(d) {
           return d > 200000 ? '#800026' :
-             d > 150000   ? '#BD0026' :
-             d > 100000   ? '#E31A1C' :
-             d > 75000    ? '#FC4E2A' :
-             d > 50000    ? '#FD8D3C' :
-             d > 25000    ? '#FEB24C' :
-             d > 10000    ? '#FED976' :
+             d > 100000   ? '#BD0026' :
+             d > 75000    ? '#E31A1C' :
+             d > 50000    ? '#FC4E2A' :
+             d > 25000    ? '#FD8D3C' :
+             d > 10000    ? '#FEB24C' :
+             d > 5000     ? '#FED976' :
                             '#FFEDA0';
+          /*return d > 20 ? '#800026' :
+             d > 15   ? '#BD0026' :
+             d > 10   ? '#E31A1C' :
+             d > 7.5  ? '#FC4E2A' :
+             d > 5    ? '#FD8D3C' :
+             d > 3    ? '#FEB24C' :
+             d > 2    ? '#FED976' :
+                        '#FFEDA0';*/
         }
         function highlightFeature(e) {
           var layer = e.target;
@@ -105,22 +113,39 @@
             click: zoomToFeature
           });
         }
-        var csv = null;
+        var csv;
+        var csv2;
         function completed(c) {
           csv = c;
           $.ajax("https://al3x69.000webhostapp.com/departements.geojson", {}).done(geo => {
             geojson = L.geoJson(JSON.parse(geo), {style: style, onEachFeature: onEachFeature}).addTo(map);
           });
         }
+        function completed2(c) {
+          csv2 = c;
+        }
         Papa.parse("https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7", {
           download: true,
           complete: completed
+        });
+        Papa.parse("https://al3x69.000webhostapp.com/population.csv", {
+          download: true,
+          complete: completed2
         });
         function getRate(code) {
           r = 0;
           csv.data.forEach((row, i) => {
             if (parseInt(row[0]) === parseInt(code)) {
-              r = r + parseInt(row[3]) + parseInt(row[4]) + parseInt(row[5]) + parseInt(row[6]);
+              r = r + parseInt(row[3]) + parseInt(row[4])
+            }
+          });
+          return r;
+        }
+        function getPercent(code) {
+          var r = 0;
+          csv2.data.forEach((row, i) => {
+            if (row[0].startsWith("D"+code)) {
+              r = Math.round(getRate(code) * 100 / parseInt(row[1]));
             }
           });
           return r;
